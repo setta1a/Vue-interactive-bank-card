@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CardChecker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div v-bind:style="{backgroundColor: changeColor}" class="card" id="app">
+
+        <!-- Здесь будет выводиться ЛОГОТИП БАНКА -->
+        <div class="bank">
+            <img v-bind:src="checkBank">
+        </div>
+
+        <!-- Поле для ввода НОМЕРА КАРТЫ -->
+        <div class="number-container">
+            <input type="text" v-bind:class="{'input-ok': countNumber,'input-err': !countNumber}" v-bind:input="checkNumber, countNumber, changeColor" v-model="number" placeholder="Номер карты">
+            <div v-bind:class="{'status-ok': countNumber, 'status-err': !countNumber}" class="status"></div>
+        </div>
+
+        <!-- Поле для ввода ИМЕНИ ДЕРЖАТЕЛЯ -->
+        <div class="name-container">
+            <input type="text" v-bind:class="{'input-ok': checkName,'input-err': !checkName}" v-bind:input="checkName" v-model="name" placeholder="Имя держателя">
+            <div v-bind:class="{'status-ok': checkName, 'status-err': !checkName}" class="status"></div>
+        </div>
+
+        <!-- Логотип ПЛАТЕЖНОЙ СИСТЕМЫ -->
+        <div class="pay-system">
+            <img v-bind:src="checkNumber">
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script>
+        "use sctrict";
+
+        new Vue({
+            el: "#app",
+            data: {
+                name: "",
+                number: "",
+                src: "",
+            },
+            computed: {
+                checkNumber: function(){
+                    switch(parseInt(this.number[0])){
+                        case 2:
+                            return "img/systems/mir.png"
+                        case 3:
+                            return "img/systems/american-exp.png"
+                        case 4:
+                            return "img/systems/visa.png"
+                        case 5:
+                            return "img/systems/mastercard.png"
+                        case 6:
+                            return "img/systems/maestro.png"
+                    }
+                },
+                countNumber: function(){
+                    let num = this.number;
+                    // Алгоритм Луна
+                    let sum = 0;
+                    if(num.length==16){
+                        for(let i=num.length-1, j=1; i>=0; i--, j++){
+                            if(j%2==0){
+                                let mul = parseInt(num[i])*2;
+                                if(mul<10){
+                                    sum += mul;
+                                }else{
+                                    sum += mul%10 + Math.floor(mul/10);
+                                }                        
+                            }else{
+                                sum += parseInt(num[i]);
+                            }
+                        }
+                        return sum%10==0;
+                    }else{
+                        return false;
+                    }
+                },
+                checkBank: function() {
+                    switch(parseInt(this.number.substring(0,6))){
+                        case 521178 :
+                        case 548673 :
+                        case 415428 :
+                        case 676371 :
+                        case 477964 :
+                        case 479004:
+                            return "img/banks/alpha.png"
+                        case 427229:
+                        case 527883: 
+                        case 447520:
+                            return "img/banks/vtb.png"
+                        case 548999:
+                        case 526483:
+                            return "img/banks/gazprombank.png"
+                        case 533736: 
+                        case 540616:
+                            return "img/banks/mts-bank.png"
+                        case 434146 :
+                        case 405870 :
+                        case 544573 :
+                        case 532301 :
+                            return "img/banks/otkrytie.png"
+                        case 440503 :
+                        case 554761 : 
+                            return "img/banks/rosbank.png"
+                        case 513691 :
+                        case 554761 : 
+                            return "img/banks/russian_standart.png"
+                        case 462730 :
+                        case 462729 : 
+                            return "img/banks/raiffaizen.png"
+                        case 427683 :
+                        case 427901 :
+                        case 427644 :
+                        case 427601 :
+                        case 427901 :
+                        case 427631:
+                        case 427638 :
+                        case 546938:
+                            return "img/banks/sberbank.png"
+                        case 521324:
+                        case 437773:
+                        case 553691:
+                            return "img/banks/tinkoff.png"
+                    }
+                },
+                checkName: function() {
+                    let arr = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
+                    let check = true
+                    for(let i = 0; i < this.name.length; ++i){
+                        if (arr.indexOf(this.name[i]) == -1){
+                            check = false
+                        }
+                    }
+                    if (this.name != ""){
+                        return check
+                    }else{
+                        return false
+                    }
+                },
+                changeColor: function() {
+                    switch(parseInt(this.number.substring(0,6))){
+                        case 521178 :
+                        case 548673 :
+                        case 415428 :
+                        case 676371 :
+                        case 477964 :
+                        case 479004:
+                            return "#f71c0e"
+                        case 427229:
+                        case 527883: 
+                        case 447520:
+                            return "#00a0e2"
+                        case 548999:
+                        case 526483:
+                            return "#002b66"
+                        case 533736: 
+                        case 540616:
+                            return "#ff0109"
+                        case 434146 :
+                        case 405870 :
+                        case 544573 :
+                        case 532301 :
+                            return "#00b4e3"
+                        case 440503 :
+                        case 554761 : 
+                            return "#b9cdcd"
+                        case 513691 :
+                        case 554761 : 
+                            return "#65543a"
+                        case 462730 :
+                        case 462729 : 
+                            return "#615d1a"
+                        case 427683 :
+                        case 427901 :
+                        case 427644 :
+                        case 427601 :
+                        case 427901 :
+                        case 427631:
+                        case 427638 :
+                        case 546938:
+                            return "#3caa35"
+                        case 521324:
+                        case 437773:
+                        case 553691:
+                            return "#fffc00"
+                        default:
+                            return "#eff5f8"
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
